@@ -1,0 +1,1 @@
+!function(e){e(document).ready(function(){var c=27;e(".what").click(function(){e(".overlay").fadeIn(1e3)}),e("a.close").click(function(){e(".overlay").fadeOut(1e3)}),e(document).keyup(function(n){n.which===c&&e(".overlay").fadeOut(1e3)})})}(jQuery);
