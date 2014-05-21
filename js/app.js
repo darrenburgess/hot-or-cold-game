@@ -31,8 +31,9 @@ $('.new').on('click', function (){
 	$('form').trigger("reset");
 	$('#feedback').text('Make your Guess!');
 	$('#count').text(countElements('#guestList > li')); //TEST
-	correctAnswer = randomNumber();//TEST
-	console.log(correctAnswer);
+	correctAnswer = randomNumber();
+	// console.log(correctAnswer);
+	// console.log (evaluateGuess(50));
 });
 
 // function: count elements 
@@ -40,8 +41,16 @@ var countElements = function(selector){
 	return $(selector).length; //TEST
 };
 
-// function: evaluate answer
-var evaluateAnswer = function(answer){
+// function: evaluate guess
+var evaluateGuess = function(guessNumber){
+	var answerDiff = Math.abs(guessNumber - correctAnswer);
+	console.log(answerDiff);
+	return 	(answerDiff === 0) 	? "Correct!" : 
+			(answerDiff <= 5) 	? "Hot" :
+			(answerDiff <= 10)	? "Warm" :
+			(answerDiff <= 20)	? "Tepid" :
+			(answerDiff <= 30)	? "Cool" :
+			"Cold";						
 };
 
 // capture answer with return
