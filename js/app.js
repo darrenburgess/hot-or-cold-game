@@ -19,6 +19,9 @@ $(document).keyup(function(e){
 	}
 });
 
+// prevent default of submit
+$('form').submit(function(e){ e.preventDefault(); });
+
 // function: generate random number
 var randomNumber = function(){
 	return Math.floor((Math.random() * 100) + 1);
@@ -32,8 +35,6 @@ $('.new').on('click', function (){
 	$('#feedback').text('Make your Guess!');
 	$('#count').text(countElements('#guestList > li')); //TEST
 	correctAnswer = randomNumber();
-	// console.log(correctAnswer);
-	// console.log (evaluateGuess(50));
 });
 
 // function: count elements 
@@ -44,28 +45,34 @@ var countElements = function(selector){
 // function: evaluate guess
 var evaluateGuess = function(guessNumber){
 	var answerDiff = Math.abs(guessNumber - correctAnswer);
-	console.log(answerDiff);
-	return 	(answerDiff === 0) 	? "Correct!" : 
+	return 	(guessNumber < 1 || guessNumber > 100) ? "Choose between 1 to 100" : 
+			(answerDiff === 0) 	? "Correct!" : 
 			(answerDiff <= 5) 	? "Hot" :
 			(answerDiff <= 10)	? "Warm" :
 			(answerDiff <= 20)	? "Tepid" :
 			(answerDiff <= 30)	? "Cool" :
-			"Cold";						
+			"Cold";
 };
 
-// capture answer with return
-
-// validate input between 1 and 100
+// capture answer with return and display response
+$('input').keyup(function(e){
+	var userGuess = $(this).val().trim();
+	if(e.which===13){
+		var response = evaluateGuess(userGuess);
+		$('#feedback').text(response);	
+	}
+});
 
 // capture answer with button
+$(document).on('click', '#guessButton', function(){
+	console.log('test');
+});
 
 // insert feedback into div#feedback
 
 // track count guesses in span#count
 
 // add each guess to as <li> to ul#guessList
-
-
 
 //end jQuery 
 });
