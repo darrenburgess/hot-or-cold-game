@@ -47,7 +47,6 @@ var countElements = function(selector){
 // function: evaluate guess
 var evaluateGuess = function(guessNumber){
 	var answerDiff = Math.abs(guessNumber - correctAnswer);
-	console.log('answerDiff=' + answerDiff);
 	return 	(guessNumber < 1 || guessNumber > 100) ? "Choose between 1 to 100" : 
 			(answerDiff === 0) 	? "Correct!" : 
 			(answerDiff <= 5) 	? "Hot" :
@@ -69,9 +68,10 @@ $.fn.captureAnswer = function(userInput){
 };
 
 $('input').keyup(function(e){
+	if(e.which === returnKey){
 		$(this).captureAnswer(this);
 	}
-});	
+});
 
 // capture answer with button
 $(document).on('click', '#guessButton', function(){
