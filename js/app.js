@@ -1,8 +1,5 @@
 (function($){
 $(document).ready(function() {
-
-var escapeKey = 27;
-var returnKey = 13;	
 	
 // Display information modal box
 $(".what").click(function(){
@@ -15,20 +12,17 @@ $("a.close").click(function(){
 });
 
 $(document).keyup(function(e){
-	if(e.which === escapeKey){
+	if(e.which === 27){  		//escape key
 		$(".overlay").fadeOut(1000);
 	}
 });
-
-// prevent default of submit
-$('form').submit(function(e){ e.preventDefault(); });
 
 // function: generate random number
 var randomNumber = function(){
 	return Math.floor((Math.random() * 100) + 1);
 };
 
-var correctAnswer = Math.floor((Math.random() * 100) + 1);
+var correctAnswer = randomNumber();
 
 // start new game on button click.  set feed back to 'make your guess'
 $('.new').on('click', function (){
@@ -48,7 +42,7 @@ var countElements = function(selector){
 var evaluateGuess = function(guessNumber){
 	var answerDiff = Math.abs(guessNumber - correctAnswer);
 	return 	(guessNumber < 1 || guessNumber > 100) ? "Choose between 1 to 100" : 
-			(answerDiff === 0) 	? "Correct!" : 
+			(answerDiff === 0) 	? "Correct!" :
 			(answerDiff <= 5) 	? "Hot" :
 			(answerDiff <= 10)	? "Warm" :
 			(answerDiff <= 20)	? "Tepid" :
@@ -56,26 +50,20 @@ var evaluateGuess = function(guessNumber){
 			"Cold";
 };
 
-// NEXT: get this plugin working
-// capture answer with return and display response
-$.fn.captureAnswer = function(userInput){
-	var userGuess = $(userInput).val().trim();
-	var response = evaluateGuess(userGuess);
-	$('#feedback').text(response);
-	$('#guessList').append($('<li>' + userGuess + '</li>'));
-	$(this).val('');
-	$('#count').text(countElements('#guessList li'));
-};
 
-$('input').keyup(function(e){
-	if(e.which === returnKey){
-		$(this).captureAnswer(this);
-	}
-});
+// prevent default of submit
+$('form').submit(function(e){ e.preventDefault(); });
 
 // capture answer with button
-$(document).on('click', '#guessButton', function(){
-	$('input').captureAnswer();
+$('#guessButton').click(function(){
+		var userGuess = $('#userGuess').val().trim();
+		var response = evaluateGuess(userGuess);
+		$('#feedback').text(response);
+		$('#guessList').append($('<li>' + userGuess + '</li>'));
+		$('#count').text(countElements('#guessList li'));
+		$('#userGuess').val('');
+		$('#userGuess').focus();
+		console.log("test");
 });
 
 //end jQuery 
