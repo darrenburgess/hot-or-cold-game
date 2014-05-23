@@ -24,6 +24,8 @@ var randomNumber = function(){
 
 var correctAnswer = randomNumber();
 
+$('#userGuess').focus();
+
 // start new game on button click.  set feed back to 'make your guess'
 $('.new').on('click', function (){
 	$('form').trigger("reset");
@@ -41,6 +43,10 @@ var countElements = function(selector){
 // function: evaluate guess
 var evaluateGuess = function(guessNumber){
 	var answerDiff = Math.abs(guessNumber - correctAnswer);
+	if(answerDiff === 0){
+		console.log('adasdfasdf');
+		disableInput(true); /* Prevent game continuing after win */
+	}
 	return 	(guessNumber < 1 || guessNumber > 100) ? "Choose between 1 to 100" : 
 			(answerDiff === 0) 	? "Correct!" :
 			(answerDiff <= 5) 	? "Hot" :
@@ -50,21 +56,22 @@ var evaluateGuess = function(guessNumber){
 			"Cold";
 };
 
-
-// prevent default of submit
-$('form').submit(function(e){ e.preventDefault(); });
-
 // capture answer with button
-$('#guessButton').click(function(){
-		var userGuess = $('#userGuess').val().trim();
-		var response = evaluateGuess(userGuess);
-		$('#feedback').text(response);
-		$('#guessList').append($('<li>' + userGuess + '</li>'));
-		$('#count').text(countElements('#guessList li'));
-		$('#userGuess').val('');
-		$('#userGuess').focus();
-		console.log("test");
+$('#guessButton').click(function(e){
+	e.preventDefault();
+	var userGuess = $('#userGuess').val().trim();
+	var response = evaluateGuess(userGuess);
+	$('#feedback').text(response);
+	$('#guessList').append($('<li>' + userGuess + '</li>'));
+	$('#count').text(countElements('#guessList li'));
+	$('#userGuess').val('');
+	$('#userGuess').focus();
 });
+
+function disableInput(disabled) {
+    $("#userGuess").prop("disabled", disabled);
+    $("#guessButton").prop("disabled", disabled);
+}
 
 //end jQuery 
 });
