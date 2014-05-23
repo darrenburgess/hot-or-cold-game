@@ -1,7 +1,8 @@
 (function($){
 $(document).ready(function() {
 
-var escapeKey = 27;	
+var escapeKey = 27;
+var returnKey = 13;	
 	
 // Display information modal box
 $(".what").click(function(){
@@ -35,6 +36,7 @@ $('.new').on('click', function (){
 	$('#feedback').text('Make your Guess!');
 	$('#count').text(countElements('#guestList > li')); //TEST
 	correctAnswer = randomNumber();
+	$('#guessList li').remove();
 });
 
 // function: count elements 
@@ -45,6 +47,7 @@ var countElements = function(selector){
 // function: evaluate guess
 var evaluateGuess = function(guessNumber){
 	var answerDiff = Math.abs(guessNumber - correctAnswer);
+	console.log('answerDiff=' + answerDiff);
 	return 	(guessNumber < 1 || guessNumber > 100) ? "Choose between 1 to 100" : 
 			(answerDiff === 0) 	? "Correct!" : 
 			(answerDiff <= 5) 	? "Hot" :
@@ -54,25 +57,26 @@ var evaluateGuess = function(guessNumber){
 			"Cold";
 };
 
+// NEXT: get this plugin working
 // capture answer with return and display response
+$.fn.captureAnswer = function(userInput){
+	var userGuess = $(userInput).val().trim();
+	var response = evaluateGuess(userGuess);
+	$('#feedback').text(response);
+	$('#guessList').append($('<li>' + userGuess + '</li>'));
+	$(this).val('');
+	$('#count').text(countElements('#guessList li'));
+};
+
 $('input').keyup(function(e){
-	var userGuess = $(this).val().trim();
-	if(e.which===13){
-		var response = evaluateGuess(userGuess);
-		$('#feedback').text(response);	
+		$(this).captureAnswer(this);
 	}
-});
+});	
 
 // capture answer with button
 $(document).on('click', '#guessButton', function(){
-	console.log('test');
+	$('input').captureAnswer();
 });
-
-// insert feedback into div#feedback
-
-// track count guesses in span#count
-
-// add each guess to as <li> to ul#guessList
 
 //end jQuery 
 });
